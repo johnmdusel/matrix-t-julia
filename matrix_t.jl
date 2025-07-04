@@ -1,7 +1,6 @@
 using Distributions
 using PDMats
-using CSV
-using Tables
+using DelimitedFiles
 
 ν = 5
 M = [1 2 3; 4 5 6]
@@ -11,6 +10,7 @@ M = [1 2 3; 4 5 6]
 dist = MatrixTDist(ν, M, Σ, Ω)
 
 samples = rand(dist, 10)
-print(samples)
 
-CSV.write("matrix_t_samples.csv",  Tables.table(samples), writeheader=false)
+flat_matrix = [reshape(s, 6) for s in samples]
+
+writedlm("matrix_t_samples.csv", flat_matrix, ',')
