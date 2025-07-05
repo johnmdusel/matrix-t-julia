@@ -1,6 +1,9 @@
+using DelimitedFiles
 using Distributions
 using PDMats
-using DelimitedFiles
+using Random
+
+Random.seed!(42)
 
 ν = 5
 M = [1 2 3; 4 5 6]
@@ -11,6 +14,9 @@ dist = MatrixTDist(ν, M, Σ, Ω)
 
 samples = rand(dist, 10)
 
-flat_matrix = [reshape(s, 6) for s in samples]
+pdfs = [pdf(dist, s) for s in samples]
 
-writedlm("matrix_t_samples.csv", flat_matrix, ',')
+flat_samples = [vec(permutedims(s)) for s in samples]
+
+writedlm("matrix_t_samples.csv", flat_samples, ",")
+writedlm("matrix_t_pdfs.csv", pdfs, ",")
